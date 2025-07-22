@@ -1,0 +1,39 @@
+@import 'tailwindcss';
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* Paper texture for animated words */
+.paper-texture {
+  position: relative;
+  background-size: 300px 300px, 200px 200px, 400px 400px, 150px 150px, 350px 350px;
+  background-position: 0 0, 100px 100px, 200px 0, 300px 200px, 150px 300px;
+}
+
+.paper-texture::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(0, 0, 0, 0.02) 0px,
+      rgba(0, 0, 0, 0.02) 1px,
+      transparent 1px,
+      transparent 6px
+    );
+  filter: blur(0.3px);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
