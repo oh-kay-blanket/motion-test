@@ -5,15 +5,15 @@ function App() {
   const scrollProgress = useScrollAnimation();
 
   return (
-    <div className='min-h-screen w-screen flex flex-col justify-center items-center px-4 bg-neutral-700'>
-      <div className='mt-[35vh]'>
+    <div className='min-h-screen w-screen flex flex-col justify-center items-center px-4 velvet-background'>
+      <div className='mt-[40vh] mb-[40vh] !z-10'>
         <h1 className='text-3xl mb-8 text-center font-oswald font-medium'>
           <div className='flex flex-col items-center gap-2 max-w-xl mx-auto uppercase'>
             {/* First row */}
             <div className='flex gap-0 justify-center'>
               <AnimatedWord
                 scrollProgress={scrollProgress}
-                animationType='leftScatter'
+                animationType='ulScatter'
                 className='bg-yellow-600'
               >
                 Office
@@ -21,7 +21,7 @@ function App() {
               <AnimatedWord
                 scrollProgress={scrollProgress}
                 animationType='upScatter'
-                className='bg-sky-700'
+                className='bg-sky-800'
               >
                 of
               </AnimatedWord>
@@ -43,14 +43,14 @@ function App() {
               <AnimatedWord
                 scrollProgress={scrollProgress}
                 animationType='dlScatter'
-                className='bg-lime-700'
+                className='bg-lime-800'
               >
                 &
               </AnimatedWord>
               <AnimatedWord
                 scrollProgress={scrollProgress}
                 animationType='drScatter'
-                className='bg-orange-600'
+                className='bg-orange-700'
               >
                 Design
               </AnimatedWord>
@@ -58,7 +58,7 @@ function App() {
           </div>
         </h1>
       </div>
-      <div className='max-w-4xl space-y-6 text-lg leading-relaxed mb-20 text-gray-300'>
+      <div className='max-w-2xl space-y-6 text-lg leading-relaxed mb-20 text-gray-300'>
         <p>
           The Office of Collecting & Design is a traveling museum -- part wonderland, part library,
           and part nostalgia machine, devoted to the diminutive, the misplaced, the unusual, and the
@@ -87,46 +87,37 @@ function App() {
         <p>Check our Tour Dates for a city near you!</p>
 
         <div className='mt-16 space-y-8'>
-          <h2 className='text-2xl font-semibold mb-4 font-oswald text-gray-100'>Experience More</h2>
+          <h2 className='text-2xl font-semibold mb-4 font-oswald text-gray-100'>Summer Break!</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua.
+            The Office of Collecting & Design is on break for the summer. Join our email list to be
+            the first to find out where we will be starting our tour in September!
+          </p>
+          <p>*The museum is not recommended for children.*</p>
+          <p>***</p>
+          <p>
+            We regret that the museum is not wheelchair accessible. Due to the nature of the space,
+            there are multiple stairs, narrow passages, and uneven floors throughout. We encourage
+            all visitors to consider their mobility needs before planning a visit.
+          </p>
+          <p>If you have questions or would like help determining if the space is right for you,</p>
+          feel free to reach out — we're happy to assist however we can.
+        </div>
+
+        <div className='mt-16 space-y-8'>
+          <h2 className='text-2xl font-semibold mb-4 font-oswald text-gray-100'>
+            Flatlay Experience
+          </h2>
+          <p>
+            Familiar with our Instagram account @office.of.collecting? We are known for a particular
+            type of photograph called a Flatlay - a collection of objects photographed from directly
+            above. In this session you can curate, sort, arrange, and photograph your own flatlay
+            and go home with a tiny instant film print of your creation.
           </p>
           <p>
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-            commodo consequat.
+            We often describe it as somewhere between play therapy and art practice and it is our
+            favorite way of sharing the museum.
           </p>
-          <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-            nulla pariatur.
-          </p>
-          <p>
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-            mollit anim id est laborum.
-          </p>
-          <p>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-            laudantium.
-          </p>
-          <p>
-            Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto
-            beatae vitae dicta sunt.
-          </p>
-          <p>
-            Explicabo nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
-          </p>
-          <p>
-            Sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt neque
-            porro quisquam.
-          </p>
-          <p>
-            Est qui dolorem ipsum quia dolor sit amet consectetur adipisci velit sed quia non
-            numquam.
-          </p>
-          <p>
-            Eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem ut
-            enim.
-          </p>
+          <p>​Flatlay Sessions last 2 hours and are $75 per person.</p>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ const AnimatedWord = ({ children, scrollProgress, animationType = 'default', cla
     const rawProgress = Math.min(Math.max(scrollProgress, 0), 1);
 
     // Create stuttered/stop-motion effect by quantizing progress into discrete steps
-    const frameRate = 300; // Reduced for more immediate response while keeping stutter effect
+    const frameRate = 40; // Reduced for more immediate response while keeping stutter effect
     // Ensure even tiny movements register
     const progress =
       rawProgress < 0.001
@@ -42,20 +42,24 @@ const AnimatedWord = ({ children, scrollProgress, animationType = 'default', cla
           x: (-progress * 1500 + (Math.cos(progress * Math.PI * 3) - 1) * 120) * scaleFactor,
           y: Math.sin(progress * Math.PI * 3) * 120 * scaleFactor,
         },
+        ulScatter: {
+          x: (-progress * 1500 + (Math.cos(progress * Math.PI * 3) - 1) * 120) * scaleFactor,
+          y: Math.sin(-progress * Math.PI * 3) * 220 * scaleFactor,
+        },
         rightScatter: {
           x: (progress * 1700 + (Math.cos(-progress * Math.PI * 2.5) - 1) * 100) * scaleFactor,
-          y: Math.sin(-progress * Math.PI * 2.5) * 100 * scaleFactor,
+          y: Math.sin(-progress * Math.PI * 2.5) * 10 * scaleFactor,
         },
         upScatter: {
           x: Math.sin(progress * Math.PI * 4) * 200 * scaleFactor,
           y: (-progress * 1000 + (Math.cos(progress * Math.PI * 2) - 1) * 80) * scaleFactor,
         },
         dlScatter: {
-          x: (-progress * 2400 + (Math.cos(progress * Math.PI * 6) - 1) * 80) * scaleFactor,
-          y: (progress * 2000 + Math.sin(progress * Math.PI * 6) * 80) * scaleFactor,
+          x: (-progress * 2500 + (Math.cos(progress * Math.PI * 6) - 1) * 80) * scaleFactor,
+          y: (progress * 1600 + Math.sin(progress * Math.PI * 6) * 80) * scaleFactor,
         },
         drScatter: {
-          x: (progress * 2400 + (Math.cos(-progress * Math.PI * 2.5) - 1) * 80) * scaleFactor,
+          x: (progress * 2600 + (Math.cos(-progress * Math.PI * 2.5) - 1) * 80) * scaleFactor,
           y: (progress * 2000 + Math.sin(progress * Math.PI * 6) * 80) * scaleFactor,
         },
       };
