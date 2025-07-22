@@ -1,5 +1,7 @@
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 import AnimatedWord from './components/AnimatedWord';
+import JumbledImageGrid from './components/JumbledImageGrid';
+import React from 'react';
 
 function App() {
   const scrollProgress = useScrollAnimation();
@@ -58,6 +60,7 @@ function App() {
           </div>
         </h1>
       </div>
+
       <div className='max-w-2xl space-y-6 text-lg leading-relaxed mb-20 text-gray-300'>
         <p>
           The Office of Collecting & Design is a traveling museum -- part wonderland, part library,
@@ -103,6 +106,8 @@ function App() {
           feel free to reach out — we're happy to assist however we can.
         </div>
 
+        <JumbledImageGrid scrollProgress={scrollProgress} />
+
         <div className='mt-16 space-y-8'>
           <h2 className='text-2xl font-semibold mb-4 font-oswald text-gray-100'>
             Flatlay Experience
@@ -118,6 +123,23 @@ function App() {
             favorite way of sharing the museum.
           </p>
           <p>​Flatlay Sessions last 2 hours and are $75 per person.</p>
+        </div>
+        <div className='mt-16 space-y-8'>
+          <h2 className='text-2xl font-semibold mb-4 font-oswald text-gray-100'>Scavenger Hunt</h2>
+          <p>
+            Explore the museum and follow our hand-drawn map to hunt down some of our favorite
+            objects in the collections! Go home with a tiny copy of the map, time-stamped with your
+            results.
+          </p>
+          <p>Scavenger Hunts last 1 hour and are $35 per person.</p>
+        </div>
+        <div className='mt-16 space-y-8'>
+          <h2 className='text-2xl font-semibold mb-4 font-oswald text-gray-100'>Regular Visit</h2>
+          <p>
+            Spend an hour exploring the space at your own pace. Open every drawer, look in every
+            box, find all the hidden details.
+          </p>
+          <p>Regular Visits last one hour and are $22 per person.</p>
         </div>
       </div>
     </div>
