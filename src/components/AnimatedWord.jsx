@@ -41,7 +41,6 @@ const AnimatedWord = ({ children, scrollProgress, animationType = 'default', cla
     const frameRate = 100; // Reduced for more immediate response while keeping stutter effect
     // Ensure even tiny movements register
     const progress = rawProgress < 0.001 ? 0 : Math.floor(rawProgress * frameRate) / frameRate;
-    console.log(progress);
 
     // Add randomized jitter for more authentic stop-motion feel
     const baseJitterAmount = 2; // base pixels of random movement
