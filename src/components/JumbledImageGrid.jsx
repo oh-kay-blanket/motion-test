@@ -171,7 +171,10 @@ function JumbledImageGrid({ scrollProgress }) {
   }, [localProgress]);
 
   return (
-    <div ref={sectionRef} className='w-full flex flex-col items-center mb-10 relative'>
+    <div
+      ref={sectionRef}
+      className='max-w-[400px] mx-auto flex flex-col items-center mb-10 relative'
+    >
       <div className='flex flex-wrap justify-center'>
         {shuffled.map((src, i) => (
           <img

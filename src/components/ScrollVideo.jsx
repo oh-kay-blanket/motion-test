@@ -4,12 +4,8 @@ import conesVideo from '../assets/video/cones.mp4';
 function ScrollVideo() {
   const videoRef = useRef(null);
   const sectionRef = useRef(null);
-  const firstFrameVideoRef = useRef(null);
-  const lastFrameVideoRef = useRef(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [isSticky, setIsSticky] = useState(false);
-  const [showFirstFrame, setShowFirstFrame] = useState(false);
-  const [showLastFrame, setShowLastFrame] = useState(false);
+  const [videoPosition, setVideoPosition] = useState('before'); // 'before', 'sticky', 'after'
 
   useEffect(() => {
     const video = videoRef.current;
@@ -32,37 +28,6 @@ function ScrollVideo() {
     };
   }, []);
 
-  // Set up first and last frame videos
-  useEffect(() => {
-    const firstFrameVideo = firstFrameVideoRef.current;
-    const lastFrameVideo = lastFrameVideoRef.current;
-    let setFirstFrame, setLastFrame;
-
-    if (firstFrameVideo) {
-      setFirstFrame = () => {
-        firstFrameVideo.currentTime = 0;
-      };
-      firstFrameVideo.addEventListener('loadedmetadata', setFirstFrame);
-      if (firstFrameVideo.readyState >= 1) setFirstFrame();
-    }
-
-    if (lastFrameVideo) {
-      setLastFrame = () => {
-        lastFrameVideo.currentTime = Math.max(0, lastFrameVideo.duration - 0.1);
-      };
-      lastFrameVideo.addEventListener('loadedmetadata', setLastFrame);
-      if (lastFrameVideo.readyState >= 1) setLastFrame();
-    }
-
-    return () => {
-      if (firstFrameVideo && setFirstFrame) {
-        firstFrameVideo.removeEventListener('loadedmetadata', setFirstFrame);
-      }
-      if (lastFrameVideo && setLastFrame) {
-        lastFrameVideo.removeEventListener('loadedmetadata', setLastFrame);
-      }
-    };
-  }, [showFirstFrame, showLastFrame]);
 
   useEffect(() => {
     if (!isVideoLoaded) return;
@@ -84,35 +49,29 @@ function ScrollVideo() {
 
         let progress = 0;
         let targetTime = 0;
-        let shouldBeSticky = false;
+        let position = 'before';
 
         if (rect.top > 0) {
           // Phase 1: Video not yet in sticky position - show first frame
           progress = 0;
           targetTime = 0;
-          shouldBeSticky = false;
-          setShowFirstFrame(true);
-          setShowLastFrame(false);
+          position = 'before';
         } else if (rect.top <= 0 && rect.top > -videoScrollDistance) {
           // Phase 2: Video is sticky and playing
           const scrolledDistance = Math.abs(rect.top);
           progress = scrolledDistance / videoScrollDistance;
           progress = Math.max(0, Math.min(1, progress));
           targetTime = progress * videoDuration;
-          shouldBeSticky = true;
-          setShowFirstFrame(false);
-          setShowLastFrame(false);
+          position = 'sticky';
         } else {
           // Phase 3: Video finished playing - show last frame
           progress = 1;
           targetTime = videoDuration;
-          shouldBeSticky = false;
-          setShowFirstFrame(false);
-          setShowLastFrame(true);
+          position = 'after';
         }
 
-        // Update sticky state
-        setIsSticky(shouldBeSticky);
+        // Update video position state
+        setVideoPosition(position);
 
         // Set video current time to match scroll position
         if (Math.abs(video.currentTime - targetTime) > 0.1) {
@@ -134,66 +93,58 @@ function ScrollVideo() {
     };
   }, [isVideoLoaded]);
 
+  const getVideoStyle = () => {
+    const baseStyle = {
+      width: '400px',
+      height: '100vh',
+      objectFit: 'cover',
+      left: '50%',
+      transform: 'translateX(-50%)',
+    };
+
+    switch (videoPosition) {
+      case 'before':
+        return {
+          ...baseStyle,
+          position: 'absolute',
+          top: 0,
+        };
+      case 'sticky':
+        return {
+          ...baseStyle,
+          position: 'fixed',
+          top: 0,
+          zIndex: 50,
+        };
+      case 'after':
+        return {
+          ...baseStyle,
+          position: 'absolute',
+          bottom: 0,
+        };
+      default:
+        return baseStyle;
+    }
+  };
+
   return (
     <>
       <div
         ref={sectionRef}
-        className='w-full bg-black relative'
+        className='max-w-[400px] mx-auto bg-black relative'
         style={{ height: `${typeof window !== 'undefined' ? window.innerHeight * 3 : 2000}px` }}
       >
-        {/* First frame thumbnail - shows when approaching video */}
-        {showFirstFrame && (
-          <video
-            ref={firstFrameVideoRef}
-            src={conesVideo}
-            muted
-            playsInline
-            preload='auto'
-            className='absolute top-0 left-0 w-full h-screen object-cover'
-            style={{
-              width: '100vw',
-              height: '100vh',
-              objectFit: 'cover',
-            }}
-          />
-        )}
-
-        {/* Last frame thumbnail - shows when past video */}
-        {showLastFrame && (
-          <video
-            ref={lastFrameVideoRef}
-            src={conesVideo}
-            muted
-            playsInline
-            preload='auto'
-            className='absolute bottom-0 left-0 w-full h-screen object-cover'
-            style={{
-              width: '100vw',
-              height: '100vh',
-              objectFit: 'cover',
-            }}
-          />
-        )}
+        {/* Single video that handles all states */}
+        <video
+          ref={videoRef}
+          src={conesVideo}
+          muted
+          playsInline
+          preload='metadata'
+          className='max-w-[400px] h-screen bg-neutral-900'
+          style={getVideoStyle()}
+        />
       </div>
-
-      {/* Main sticky video */}
-      <video
-        ref={videoRef}
-        src={conesVideo}
-        muted
-        playsInline
-        preload='metadata'
-        className={`w-full h-screen bg-black z-50 ${isSticky ? 'fixed' : 'absolute'}`}
-        style={{
-          position: isSticky ? 'fixed' : 'absolute',
-          top: isSticky ? 0 : 'auto',
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          objectFit: 'cover',
-          visibility: isSticky ? 'visible' : 'hidden',
-        }}
-      />
     </>
   );
 }

@@ -67,13 +67,40 @@ function DancingImages({ scrollProgress }) {
     };
   }, []);
 
+  // Generate randomized values for each image index
+  const getRandomValues = useMemo(() => {
+    const cache = {};
+    return (index) => {
+      if (cache[index]) return cache[index];
+
+      const seed = index * 137 + 42; // Unique seed for each image
+      const random = (offset = 0) => {
+        const x = Math.sin(seed + offset) * 10000;
+        return x - Math.floor(x);
+      };
+
+      cache[index] = {
+        rotationTiming1: random(1) * 0.4 + 0.8, // 0.8-1.2x rotation speed
+        rotationTiming2: random(2) * 0.4 + 0.8,
+        rotationIntensity: random(3) * 3 + 1.5, // 1.5-4.5 degrees of jitter rotation
+        rotationOffset: random(4) * Math.PI * 2, // Random rotation phase
+        jitterTiming1: random(5) * 0.5 + 0.8, // Randomize existing jitter timing too
+        jitterTiming2: random(6) * 0.5 + 0.8,
+        jitterTiming3: random(7) * 0.5 + 0.8,
+        jitterTiming4: random(8) * 0.5 + 0.8,
+      };
+
+      return cache[index];
+    };
+  }, []);
+
   // Dancing animation function similar to AnimatedWord style
   const getDancingImageStyle = useMemo(() => {
     return (index) => {
       const rawProgress = Math.min(Math.max(localProgress, 0), 1);
 
       // Stop-motion effect with frame quantization
-      const frameRate = 20;
+      const frameRate = 15;
       const progress =
         rawProgress < 0.001
           ? 0
@@ -82,16 +109,28 @@ function DancingImages({ scrollProgress }) {
               rawProgress > 0 ? 1 / frameRate : 0
             );
 
-      // Jitter for stop-motion authenticity
+      // Get randomized values for this image
+      const randomValues = getRandomValues(index);
+
+      // Jitter for stop-motion authenticity with randomization
       const jitterAmount = 2;
       const frameIndex = Math.floor(rawProgress * frameRate);
       const jitterX =
-        (Math.sin(frameIndex * 2.4 + index) + Math.cos(frameIndex * 1.7 + index)) *
+        (Math.sin(frameIndex * 2.4 * randomValues.jitterTiming1 + index) +
+          Math.cos(frameIndex * 1.7 * randomValues.jitterTiming2 + index)) *
         jitterAmount *
         (progress > 0 ? 1 : 0);
       const jitterY =
-        (Math.cos(frameIndex * 2.1 + index) + Math.sin(frameIndex * 1.9 + index)) *
+        (Math.cos(frameIndex * 2.1 * randomValues.jitterTiming3 + index) +
+          Math.sin(frameIndex * 1.9 * randomValues.jitterTiming4 + index)) *
         jitterAmount *
+        (progress > 0 ? 1 : 0);
+
+      // Add randomized rotation jitter
+      const jitterRotation =
+        (Math.sin(frameIndex * 3.2 * randomValues.rotationTiming1 + randomValues.rotationOffset) +
+          Math.cos(frameIndex * 2.7 * randomValues.rotationTiming2 + randomValues.rotationOffset)) *
+        randomValues.rotationIntensity *
         (progress > 0 ? 1 : 0);
 
       // Mobile scaling
@@ -99,8 +138,8 @@ function DancingImages({ scrollProgress }) {
       const scaleFactor = isMobile ? 0.7 : 1;
 
       // Single file formation: images follow each other with spacing
-      const spacing = 120 * scaleFactor; // Space between images in the line
-      const baseDistance = 700 * scaleFactor; // Distance to travel across screen
+      const spacing = 150 * scaleFactor; // Increased space between images in the line
+      const baseDistance = 800 * scaleFactor; // Distance to travel across screen
 
       // Calculate which copy this is and position within that copy
       const copyIndex = Math.floor(index / dancingImages.length);
@@ -113,12 +152,28 @@ function DancingImages({ scrollProgress }) {
       // Position within the copy
       const positionInCopy = imageIndexInCopy * spacing;
 
-      // Calculate raw position
-      const rawX = progress * baseDistance - 300 - positionInCopy - copyStartOffset;
+      // Calculate raw position for this specific copy and image
+      const baseX = progress * baseDistance - 300;
+      const rawX = baseX - positionInCopy - copyStartOffset;
 
-      // Create seamless looping: when an image goes off the right, it reappears on the left
-      const loopWidth = totalSetLength * 2; // Loop every 2 complete sets to avoid gaps
-      const x = (((rawX % loopWidth) + loopWidth) % loopWidth) - totalSetLength;
+      // Create seamless looping with simple wrapping
+      let x = rawX;
+
+      // Simple looping: wrap images when they go off screen
+      const loopWidth = totalSetLength * 1.5; // Width to wrap around
+      
+      // Wrap images for continuous loop
+      while (x < -window.innerWidth - 300) {
+        x += loopWidth;
+      }
+      while (x > window.innerWidth + 300) {
+        x -= loopWidth;
+      }
+
+      // Final check for completely off-screen images
+      const viewportWidth = window.innerWidth;
+      const buffer = 250;
+      const isCompletelyOffScreen = x < -viewportWidth - buffer || x > viewportWidth + buffer;
 
       // Snake-like motion: each image follows the path of the one before it
       const snakeAmplitude = 40 * scaleFactor; // How much the snake waves up and down
@@ -137,21 +192,22 @@ function DancingImages({ scrollProgress }) {
       const wiggleX = Math.cos(wavePhase * 2) * 3 * scaleFactor;
       const wiggleY = Math.sin(wavePhase * 2.3) * 2 * scaleFactor;
 
-      // Rotation that follows the snake movement
-      const rotate = Math.sin(wavePhase * 0.8) * 15;
+      // Rotation that follows the snake movement with jitter
+      const baseRotate = Math.sin(wavePhase * 0.8) * 15;
+      const rotate = baseRotate + jitterRotation;
 
       // Scale that pulses with the snake movement
       const scale = 1 + Math.abs(Math.sin(wavePhase * 1.5)) * 0.08;
 
-      // Check if off-screen for performance
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-      const buffer = 200;
-      const isOffScreen =
-        x < -viewportWidth - buffer ||
-        x > viewportWidth + buffer ||
-        finalY < -viewportHeight - buffer ||
-        finalY > viewportHeight + buffer;
+      // Early return for completely off-screen images to prevent stacking
+      if (isCompletelyOffScreen) {
+        return {
+          transform: `translate(${x}px, ${finalY}px) rotate(0deg) scale(0)`,
+          opacity: 0,
+          visibility: 'hidden',
+          willChange: 'auto',
+        };
+      }
 
       return {
         transform: `translate(${x + jitterX + wiggleX}px, ${
