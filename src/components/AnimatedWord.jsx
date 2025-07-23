@@ -5,7 +5,7 @@ const AnimatedWord = ({ children, scrollProgress, animationType = 'default', cla
     const rawProgress = Math.min(Math.max(scrollProgress, 0), 1);
 
     // Create stuttered/stop-motion effect by quantizing progress into discrete steps
-    const frameRate = 40; // Reduced for more immediate response while keeping stutter effect
+    const frameRate = 70; // Reduced for more immediate response while keeping stutter effect
     // Ensure even tiny movements register
     const progress =
       rawProgress < 0.001
