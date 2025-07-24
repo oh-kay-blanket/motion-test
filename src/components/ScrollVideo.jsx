@@ -28,7 +28,6 @@ function ScrollVideo() {
     };
   }, []);
 
-
   useEffect(() => {
     if (!isVideoLoaded) return;
 
@@ -45,7 +44,7 @@ function ScrollVideo() {
         const rect = section.getBoundingClientRect();
         const windowHeight = window.innerHeight;
         const videoDuration = video.duration;
-        const videoScrollDistance = windowHeight * 2; // Distance to scroll through entire video
+        const videoScrollDistance = windowHeight * 0.5; // Distance to scroll through entire video
 
         let progress = 0;
         let targetTime = 0;
@@ -69,6 +68,8 @@ function ScrollVideo() {
           targetTime = videoDuration;
           position = 'after';
         }
+
+        console.log(progress, targetTime);
 
         // Update video position state
         setVideoPosition(position);
@@ -132,7 +133,7 @@ function ScrollVideo() {
       <div
         ref={sectionRef}
         className='max-w-[400px] mx-auto bg-black relative'
-        style={{ height: `${typeof window !== 'undefined' ? window.innerHeight * 3 : 2000}px` }}
+        style={{ height: `${typeof window !== 'undefined' ? window.innerHeight * 1.5 : 2000}px` }}
       >
         {/* Single video that handles all states */}
         <video

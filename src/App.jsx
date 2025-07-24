@@ -173,6 +173,54 @@ function App() {
           </div>
         </div>
       </div>
+      <div className='w-screen bg-neutral-900'>
+        <div className='flex flex-col justify-center items-center px-4'>
+          <div className='mt-16 space-y-8 text-lg leading-relaxed text-gray-300 max-w-2xl mx-auto'>
+            <h2 className='text-2xl font-semibold mb-4 font-oswald text-gray-100'>
+              Scavenger Hunt
+            </h2>
+            <p>
+              Explore the museum and follow our hand-drawn map to hunt down some of our favorite
+              objects in the collections! Go home with a tiny copy of the map, time-stamped with
+              your results.
+            </p>
+            <p>Scavenger Hunts last 1 hour and are $35 per person.</p>
+
+            <h2 className='text-2xl font-semibold mb-4 font-oswald text-gray-100 mt-16'>
+              Regular Visit
+            </h2>
+            <p>
+              Spend an hour exploring the space at your own pace. Open every drawer, look in every
+              box, find all the hidden details.
+            </p>
+            <p>Regular Visits last one hour and are $22 per person.</p>
+          </div>
+        </div>
+      </div>
+      <div className='w-screen bg-neutral-900'>
+        <div className='flex flex-col justify-center items-center px-4'>
+          <div className='mt-16 space-y-8 text-lg leading-relaxed text-gray-300 max-w-2xl mx-auto'>
+            <h2 className='text-2xl font-semibold mb-4 font-oswald text-gray-100'>
+              Scavenger Hunt
+            </h2>
+            <p>
+              Explore the museum and follow our hand-drawn map to hunt down some of our favorite
+              objects in the collections! Go home with a tiny copy of the map, time-stamped with
+              your results.
+            </p>
+            <p>Scavenger Hunts last 1 hour and are $35 per person.</p>
+
+            <h2 className='text-2xl font-semibold mb-4 font-oswald text-gray-100 mt-16'>
+              Regular Visit
+            </h2>
+            <p>
+              Spend an hour exploring the space at your own pace. Open every drawer, look in every
+              box, find all the hidden details.
+            </p>
+            <p>Regular Visits last one hour and are $22 per person.</p>
+          </div>
+        </div>
+      </div>
     </main>
   );
 }
